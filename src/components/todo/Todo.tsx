@@ -25,20 +25,23 @@ function Todo() {
   };
 
   const handleList = ()=>{
-    setList(prev => [...prev,value])
-    if(inputRef.current){
-      inputRef.current.value = ''
+    if(inputRef.current?.value !== ''){
+      setList(prev => [...prev,value])
+      if(inputRef.current){
+        inputRef.current.value = ''
+      }
+      setValue('')
     }
-    setValue('')
+
   };
 
 
   return (
     <>
       <div>
-        <h1 className='todo__header'>TODO</h1>
+        <h1 className='text-lg font-semibold'>Todo Base</h1>
         <Input handleChange={handleChange} handleClick={handleClick} handleKeyDown={handleKeyDown} inputRef={inputRef} value={value} />
-        <TodoList list={list}/>
+        <TodoList list={list} setList={setList}/>
       </div>   
     </>
   )

@@ -14,6 +14,17 @@ function TodoAdvanced() {
     
     const inputRef = useRef<HTMLInputElement>(null)
 
+    useEffect(()=>{
+        const storedList = localStorage.getItem("todoList")
+        if(storedList){
+            setList(JSON.parse(storedList))
+        }
+    },[])
+
+    useEffect(()=>{
+        localStorage.setItem("todoList",JSON.stringify(list))
+    },[list])
+
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue({
             text:inputRef.current?.value || '',
@@ -32,30 +43,31 @@ function TodoAdvanced() {
     };
 
     const handleList = ()=>{
-        setList(prev => [...prev,value]);
-        if(inputRef.current){
-          inputRef.current.value = ''
+        const inputValue = inputRef.current?.value.trim();
+        if(inputValue){
+            setList(prev => [...prev,value]);
+            setValue({ text: "", isCompleted: false });
+            if(inputRef.current){
+              inputRef.current.value = ''
+            }
         }
-        setValue({ text: "", isCompleted: false });
+
     };
 
-    useEffect(()=>{
-        // console.log(value)
-        console.log(typeof(list))
-    },[list])
+    // useEffect(()=>{
+    //     // console.log(value)
+    //     console.log(typeof(list))
+    //     console.log(list)
+    // },[list])
 
   return (
-    <div className='container mx-auto px-20 py-10  flex justify-center'>
-        <div className='w-full md:w-8/12'>
-            <div className="bg-white shadow-md rounded px-6 py-4">
-                <div className='mb-4'>
-                    <h1 className='text-lg font-semibold'>Todo Advanced</h1>
-                </div>
-                <Input value={value.text || ''} handleChange={handleChange} handleClick={handleClick} handleKeyDown={handleKeyDown} inputRef={inputRef}/>
-                <TodoList list={list} setList={setList}/>
-            </div>
+    <>
+        <div className='mb-4'>
+            <h1 className='text-lg font-semibold'>Todo Advanced</h1>
         </div>
-    </div>
+        <Input value={value.text || ''} handleChange={handleChange} handleClick={handleClick} handleKeyDown={handleKeyDown} inputRef={inputRef}/>
+        <TodoList list={list} setList={setList}/>
+    </>
   )
 }
 
